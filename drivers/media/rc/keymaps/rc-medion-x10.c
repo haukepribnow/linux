@@ -2,6 +2,7 @@
  * Medion X10 RF remote keytable
  *
  * Copyright (C) 2011 Anssi Hannula <anssi.hannula@?ki.fi>
+ * The keytable was revised in 2015 by Hauke Pribnow <hauke.pribnow@gmx.net>
  *
  * This file is based on a keytable provided by
  * Jan Losinski <losinski@wh2.tu-dresden.de>
@@ -37,6 +38,16 @@ static struct rc_map_table medion_x10[] = {
 	{ 0x30, KEY_CHANNEL },         /* <icon with several horizontal lines>, subtitle: CHANNEL LIST */
 
 	{ 0x1b, KEY_CONFIG },          /* S, subtitle: SETUP */
+	        /* KEY_CONFIG is used here instead of KEY_SETUP because in the HID Usage Tables the expression
+	          "setup" refers to entering the BIOS-level system setup program. This expression is defined
+	          in the same sections as expressions like "system cold restart", "system dock" and similar.
+	          KEY_SETUP is used in other kernel drivers by integrated devices (like stand-alone network
+	          storage devices or wireless platforms/routers) to reset the settings to the device defaults
+	          or to launch some kind of system backup tool.
+	          
+	          KEY_CONFIG on the other hand most likely refers to the HID Usage Tables entry "Application
+	          Launch of Consumer Control Configuration". This makes a lot more sense for a SETUP button on
+	          a consumer home media remote like the X10. */
 	{ 0x31, KEY_VIDEO },           /* <icon with a TV screen displaying lines>, subtitle: VIDEO DESKTOP */
 
 	{ 0x08, KEY_VOLUMEDOWN },      /* VOL - */
@@ -51,16 +62,20 @@ static struct rc_map_table medion_x10[] = {
 	{ 0x35, KEY_BLUE },            /* <blue circle> */
 	{ 0x16, KEY_TEXT },            /* TXT */
 
-	{ 0x0d, KEY_NUMERIC_1 },
-	{ 0x0e, KEY_NUMERIC_2 },
-	{ 0x0f, KEY_NUMERIC_3 },
-	{ 0x10, KEY_NUMERIC_4 },
-	{ 0x11, KEY_NUMERIC_5 },
-	{ 0x12, KEY_NUMERIC_6 },
-	{ 0x13, KEY_NUMERIC_7 },
-	{ 0x14, KEY_NUMERIC_8 },
-	{ 0x15, KEY_NUMERIC_9 },
-	{ 0x17, KEY_NUMERIC_0 },
+	/* While input.h says that KEY_NUMERIC_x is used by remote controls (and others),
+	   rc-ati-x10.c says that the X11 protocol has problems with keycodes greater than
+	   255 (which KEY_NUMERIC_x are) and suggests avoiding high keycodes in default
+	   maps. That's why the KEY_NUMERIC_x constants are not used here. */
+	{ 0x0d, KEY_1 },
+	{ 0x0e, KEY_2 },
+	{ 0x0f, KEY_3 },
+	{ 0x10, KEY_4 },
+	{ 0x11, KEY_5 },
+	{ 0x12, KEY_6 },
+	{ 0x13, KEY_7 },
+	{ 0x14, KEY_8 },
+	{ 0x15, KEY_9 },
+	{ 0x17, KEY_0 },
 	{ 0x1c, KEY_SEARCH },          /* TV/RADIO, supertitle: CH. SEARCH */
 	{ 0x20, KEY_BACKSPACE },       /* <arrow pointing to the left>, supertitle: DELETE */
 
